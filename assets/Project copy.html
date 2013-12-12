@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rise and Fall of American Cities</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+        
+        h1{
+          font-family: georgia;
+          font-size: 30px;
+          line-height: 10px;
+          font-weight: normal;
+          color: #262626;
+        }
+        
+        p{
+          font-family: georgia;
+          font-size: 14px;
+          line-height: 15px;
+          font-weight: normal;
+          color: #3D3D3D;
+        }
+        
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 120px;
+            height: 20px;
+            padding: 2px;
+            font: 14px sans-serif;
+            color: white;
+            background: #686868;
+            border: 1px;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        
+        .SFOline {
+        	fill: none;
+        	stroke: #FB5B1F;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .SFOline:hover{
+            stroke: #FB5B1F;
+            stroke-width: 10px;
+            opacity: 1;
+        }
+        
+        .SJOline {
+        	fill: none;
+        	stroke: #FF9966;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .SJOline:hover{
+            stroke: #FF9966;
+            stroke-width: 10px;
+            opacity: 1;
+        }
+        
+        .DETline {
+        	fill: none;
+        	stroke: steelblue;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .DETline:hover {
+         	fill: none;
+         	stroke: steelblue;
+         	stroke-width: 10px;
+         	opacity: 1;
+         }
+        
+        .DALline {
+        	fill: none;
+        	stroke: #CC6600;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .DALline:hover {
+        	fill: none;
+        	stroke: #CC6600;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .INDline {
+        	fill: none;
+        	stroke: #FF9900;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .INDline:hover {
+        	fill: none;
+        	stroke: #FF9900;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .LAXline {
+        	fill: none;
+        	stroke: #FFC629;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .LAXline:hover {
+        	fill: none;
+        	stroke: #FFC629;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .NYCline {
+            fill: none;
+            stroke: #1B2A16;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .NYCline:hover {
+            fill: none;
+            stroke: #1B2A16;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .OAKline {
+            fill: none;
+            stroke: #C13100;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .OAKline:hover {
+            fill: none;
+            stroke: #C13100;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .PHXline {
+            fill: none;
+            stroke: #5A0000;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .PHXline:hover {
+            fill: none;
+            stroke: #5A0000;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .SANline {
+            fill: none;
+            stroke: #663300;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .SANline:hover {
+            fill: none;
+            stroke: #663300;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .SDGline {
+            fill: none;
+            stroke: #CC9900;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .SDGline:hover {
+            fill: none;
+            stroke: #CC9900;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .BALline {
+            fill: none;
+            stroke: #6699FF;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .BALline:hover {
+            fill: none;
+            stroke: #6699FF;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .BOSline {
+            fill: none;
+            stroke: #666699;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .BOSline:hover {
+            fill: none;
+            stroke: #666699;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .BUFline {
+            fill: none;
+            stroke: #003333;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .BUFline:hover {
+            fill: none;
+            stroke: #003333;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .CHIline {
+            fill: none;
+            stroke: #72B095;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .CHIline:hover {
+            fill: none;
+            stroke: #72B095;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .CINline {
+            fill: none;
+            stroke: #B3B3D7;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .CINline:hover {
+            fill: none;
+            stroke: #B3B3D7;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .MILline {
+            fill: none;
+            stroke: #000078;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .MILline:hover {
+            fill: none;
+            stroke: #000078;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .PHIline {
+            fill: none;
+            stroke: #421C52;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .PHIline:hover {
+            fill: none;
+            stroke: #421C52;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .STLline {
+            fill: none;
+            stroke: #732C7B;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .STLline:hover {
+            fill: none;
+            stroke: #732C7B;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .JACline {
+            fill: none;
+            stroke: #732C7B;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .JACline:hover {
+            fill: none;
+            stroke: #732C7B;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .CLEline {
+        	fill: none;
+        	stroke: #027aa8;
+        	stroke-width: 2px;
+        	opacity: .7;
+        }
+        
+        .CLEline:hover {
+        	fill: none;
+        	stroke: #027aa8;
+        	stroke-width: 10px;
+        	opacity: 1;
+        }
+        
+        .dot {
+          fill: #5F6062;
+          stroke: #5F6062;
+        }
+        
+        .domain {
+        	fill: none;
+        	stroke: #999999;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .tick line {
+        	stroke: #999999;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .tick {
+        	font-size: 10px;
+          opacity: 0.3;
+          stroke-style: dotted;
+        }
+
+        .grid {
+          stroke: #999999;
+          opacity: 0.3;
+        }
+        
+        
+    </style>
+    
+    <script>
+        d3.csv("FullProjectData.csv", function(data){
+            
+//            console.log(data)
+            
+            data.forEach(function(d){ 
+                d.pop = +d.pop;
+            })
+            
+            var nested = d3.nest()
+                .key(function(d) { return d.year; }).sortValues(function(a, b){ return b.pop - a.pop; })
+                .entries(data);
+                
+            nested.forEach(function(y) {
+                y.values.forEach(function(c, i) {
+                    c.rank = i + 1;
+                });
+            });
+            
+            console.log(data);
+            
+            function populationChart() {
+                           var SJO = data.filter(function(d) {return d.city === "San Jose"; });
+                            var DET = data.filter(function(d) {return d.city === "Detroit"; });
+                            var SFO = data.filter(function(d) {return d.city === "San Francisco"; });
+                            var DAL = data.filter(function(d) {return d.city === "Dallas"; });
+                            var IND = data.filter(function(d) {return d.city === "Indianapolis"; });
+                            var LAX = data.filter(function(d) {return d.city === "Los Angeles"; });
+                            var NYC = data.filter(function(d) {return d.city === "New York"; });
+                            var OAK = data.filter(function(d) {return d.city === "Oakland"; });
+                            var PHX = data.filter(function(d) {return d.city === "Phoenix"; });
+                            var SAN = data.filter(function(d) {return d.city === "San Antonio"; });
+                            var SDG = data.filter(function(d) {return d.city === "San Diego"; });
+                            var BAL = data.filter(function(d) {return d.city === "Baltimore"; });
+                            var BOS = data.filter(function(d) {return d.city === "Boston"; });
+                            var BUF = data.filter(function(d) {return d.city === "Buffalo"; });
+                            var CHI = data.filter(function(d) {return d.city === "Chicago"; });
+                            var CIN = data.filter(function(d) {return d.city === "Cincinnati"; });
+                            var CLE = data.filter(function(d) {return d.city === "Cleveland"; });
+                            var MIL = data.filter(function(d) {return d.city === "Milwaukee"; });
+                            var PHI = data.filter(function(d) {return d.city === "Philadelphia"; });
+                            var STL = data.filter(function(d) {return d.city === "St. Louis"; });
+                            
+                            var toolTip = d3.select(".chart").append("div")
+                                            .attr("class", "tooltip")
+                                            .style("opacity", 0);
+
+                            var margin = {top: 5, right: 5, bottom: 20, left: 25};
+                                width = 1000 - margin.left - margin.right,
+                                height = 500 - margin.top - margin.bottom;
+
+                            var svg = d3.select(".chart")
+                                        .append("svg")
+                                        .attr("width", width + margin.left + margin.right)
+                                        .attr("height", height + margin.top + margin.bottom)
+                                        .append("g")
+                                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                            var xScale = d3.scale.linear()
+                                        .domain([1840, 2010])
+                                    	.range([0, width]);
+
+                            var yScale = d3.scale.linear()
+                                    	   	.domain([0, 2200000])
+                                    	   	.range([height, 0]);
+
+                            var xAxis = d3.svg.axis()
+                                        	.tickFormat(function(d) {return d;})
+                                        	.scale(xScale);
+
+                            var yAxis = d3.svg.axis()
+                                            .tickFormat(function(d) {return d;})
+                                            .orient("left")
+                                            .scale(yScale)
+                                            .ticks(9)
+                                            .tickSize(width - margin.left - margin.right);
+
+                                        svg.append("g")
+                                            .attr("class", "axis")
+                                           	.attr("transform", "translate(" + width + ", 0)")
+                                            .call(yAxis);
+
+                                        svg.append("g")
+                                            .attr("class", "axis")
+                                            .attr("transform", "translate(0, " + height + ")")
+                                            .call(xAxis);
+
+                            var SFOline = d3.svg.line()
+                            	            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+                /*                            
+                                        svg.selectAll(".dot")
+                                            .data(SFO)
+                                            .enter()
+                                            .append("circle")
+                                            .attr("class", "dot")
+                                            .attr("r", 2)
+                                            .attr("cx", function(d, i) { return xScale(d.year); })
+                                            .attr("cy", function(d) { return yScale(d.pop); });
+                */
+                                        svg.append("path")
+                                            .attr("class", "SFOline")
+                                            .attr("d", SFOline(SFO))
+                                            .on("mouseover", function(d,i) {
+                                                d3.select(this).style("stroke", "#FB5B1F");
+                                                toolTip.html("San Francisco")
+                                                    .transition()
+                                                    .duration(100)
+                                                    .style("left", function() {
+                                                        console.log(d3.event);
+                                                        return d3.event.x + "px";
+                                                    })
+                                                    .style("top", d3.event.y + "px")
+                                                    .style("opacity", 1);
+                                                              })
+                                                          .on("mouseout", function(d) {
+                                                              toolTip.transition()
+                                                              .duration(500)
+                                                              .style("opacity", 0);
+                                                          });
+
+                            var SJOline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "SJOline")
+                                            .attr("d", SJOline(SJO));
+                /*
+                                        svg.selectAll(".dot")
+                                            .data(SJO)
+                                            .enter()
+                                            .append("circle")
+                                            .attr("class", "dot")
+                                            .attr("r", 2)
+                                            .attr("cx", function(d, i) { return xScale(d.year); })
+                                            .attr("cy", function(d) { return yScale(d.pop); });
+                */
+
+                            var DETline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "DETline")
+                                            .attr("d", DETline(DET));
+
+                            var DALline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "DALline")
+                                            .attr("d", DALline(DAL));
+
+                            var INDline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "INDline")
+                                            .attr("d", INDline(IND));
+
+                            var LAXline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "LAXline")
+                                            .attr("d", LAXline(LAX));
+
+                            var NYCline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "NYCline")
+                                            .attr("d", NYCline(NYC));                
+
+
+                            var OAKline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "OAKline")
+                                            .attr("d", OAKline(OAK));
+
+                            var PHXline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "PHXline")
+                                            .attr("d", PHXline(PHX));
+
+                            var SANline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "SANline")
+                                            .attr("d", SANline(SAN));
+
+                            var SDGline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "SDGline")
+                                            .attr("d", SDGline(SDG));
+
+                            var BALline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "BALline")
+                                            .attr("d", BALline(BAL));
+
+                            var BOSline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "BOSline")
+                                            .attr("d", BOSline(BOS));
+
+                            var BUFline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "BUFline")
+                                            .attr("d", BUFline(BUF));
+
+                            var CHIline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "CHIline")
+                                            .attr("d", CHIline(CHI));
+
+                            var CLEline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "CLEline")
+                                            .attr("d", CLEline(CLE));
+
+                            var CINline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "CINline")
+                                            .attr("d", CINline(CIN));
+
+                            var MILline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "MILline")
+                                            .attr("d", MILline(MIL));
+
+                            var PHIline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "PHIline")
+                                            .attr("d", PHIline(PHI));
+
+                            var STLline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                        svg.append("path")
+                                            .attr("class", "STLline")
+                                            .attr("d", STLline(STL));
+                                            
+                            var JACline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.pop); });
+
+                                            svg.append("path")
+                                            .attr("class", "JACline")
+                                            .attr("d", STLline(STL));
+
+            }
+            populationChart();
+            
+            function rankChart() {
+                           var SJO = data.filter(function(d) {return d.city === "San Jose"; });
+                            var DET = data.filter(function(d) {return d.city === "Detroit"; });
+                            var SFO = data.filter(function(d) {return d.city === "San Francisco"; });
+                            var DAL = data.filter(function(d) {return d.city === "Dallas"; });
+                            var IND = data.filter(function(d) {return d.city === "Indianapolis"; });
+                            var LAX = data.filter(function(d) {return d.city === "Los Angeles"; });
+                            var NYC = data.filter(function(d) {return d.city === "New York"; });
+                            var OAK = data.filter(function(d) {return d.city === "Oakland"; });
+                            var PHX = data.filter(function(d) {return d.city === "Phoenix"; });
+                            var SAN = data.filter(function(d) {return d.city === "San Antonio"; });
+                            var SDG = data.filter(function(d) {return d.city === "San Diego"; });
+                            var BAL = data.filter(function(d) {return d.city === "Baltimore"; });
+                            var BOS = data.filter(function(d) {return d.city === "Boston"; });
+                            var BUF = data.filter(function(d) {return d.city === "Buffalo"; });
+                            var CHI = data.filter(function(d) {return d.city === "Chicago"; });
+                            var CIN = data.filter(function(d) {return d.city === "Cincinnati"; });
+                            var CLE = data.filter(function(d) {return d.city === "Cleveland"; });
+                            var MIL = data.filter(function(d) {return d.city === "Milwaukee"; });
+                            var PHI = data.filter(function(d) {return d.city === "Philadelphia"; });
+                            var STL = data.filter(function(d) {return d.city === "St. Louis"; });
+                            var JAC = data.filter(function(d) {return d.city === "Jacksonville"; });
+                            
+                            
+                            var toolTip = d3.select(".chart2").append("div")
+                                            .attr("class", "tooltip")
+                                            .style("opacity", 0);
+
+                            var margin = {top: 5, right: 5, bottom: 20, left: 25};
+                                width = 1000 - margin.left - margin.right,
+                                height = 500 - margin.top - margin.bottom;
+
+                            var svg = d3.select(".chart2")
+                                        .append("svg")
+                                        .attr("width", width + margin.left + margin.right)
+                                        .attr("height", height + margin.top + margin.bottom)
+                                        .append("g")
+                                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                            var xScale = d3.scale.linear()
+                                        .domain([1840, 2010])
+                                    	.range([0, width]);
+
+                            var yScale = d3.scale.linear()
+                                    	   	.domain([20, 1])
+                                    	   	.range([height, 0]);
+
+                            var xAxis = d3.svg.axis()
+                                        	.tickFormat(function(d) {return d;})
+                                        	.scale(xScale);
+
+                            var yAxis = d3.svg.axis()
+                                            .tickFormat(function(d) {return d;})
+                                            .orient("left")
+                                            .scale(yScale)
+                                            .ticks(20)
+                                            .tickSize(width - margin.left - margin.right);
+
+                                        svg.append("g")
+                                            .attr("class", "axis")
+                                           	.attr("transform", "translate(" + width + ", 0)")
+                                            .call(yAxis);
+
+                                        svg.append("g")
+                                            .attr("class", "axis")
+                                            .attr("transform", "translate(0, " + height + ")")
+                                            .call(xAxis);
+
+                            var SFOline = d3.svg.line()
+                            	            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+                /*                            
+                                        svg.selectAll(".dot")
+                                            .data(SFO)
+                                            .enter()
+                                            .append("circle")
+                                            .attr("class", "dot")
+                                            .attr("r", 2)
+                                            .attr("cx", function(d, i) { return xScale(d.year); })
+                                            .attr("cy", function(d) { return yScale(d.pop); });
+                */
+                                        svg.append("path")
+                                            .attr("class", "SFOline")
+                                            .attr("d", SFOline(SFO))
+                                            .on("mouseover", function(d,i) {
+                                                d3.select(this).style("stroke", "#FB5B1F");
+                                                toolTip.html("San Francisco")
+                                                    .transition()
+                                                    .duration(100)
+                                                    .style("right", 100 + "px")
+                                                    .style("top", div.height + "px")
+//                                                    .style("left", function() {
+//                                                        console.log(d3.event);
+//                                                        return d3.event.x + "px";
+//                                                    })
+//                                                    .style("top", d3.event.y + "px")
+                                                    .style("opacity", 1);
+                                                              })
+                                                          .on("mouseout", function(d) {
+                                                              toolTip.transition()
+                                                              .duration(500)
+                                                              .style("opacity", 0);
+                                                          });
+
+                            var SJOline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "SJOline")
+                                            .attr("d", SJOline(SJO));
+                /*
+                                        svg.selectAll(".dot")
+                                            .data(SJO)
+                                            .enter()
+                                            .append("circle")
+                                            .attr("class", "dot")
+                                            .attr("r", 2)
+                                            .attr("cx", function(d, i) { return xScale(d.year); })
+                                            .attr("cy", function(d) { return yScale(d.pop); });
+                */
+
+                            var DETline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "DETline")
+                                            .attr("d", DETline(DET));
+
+                            var DALline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "DALline")
+                                            .attr("d", DALline(DAL));
+
+                            var INDline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "INDline")
+                                            .attr("d", INDline(IND));
+
+                            var LAXline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "LAXline")
+                                            .attr("d", LAXline(LAX));
+
+                            var NYCline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "NYCline")
+                                            .attr("d", NYCline(NYC));                
+
+
+                            var OAKline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "OAKline")
+                                            .attr("d", OAKline(OAK));
+
+                            var PHXline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "PHXline")
+                                            .attr("d", PHXline(PHX));
+
+                            var SANline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "SANline")
+                                            .attr("d", SANline(SAN));
+
+                            var SDGline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "SDGline")
+                                            .attr("d", SDGline(SDG));
+
+                            var BALline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "BALline")
+                                            .attr("d", BALline(BAL));
+
+                            var BOSline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "BOSline")
+                                            .attr("d", BOSline(BOS));
+
+                            var BUFline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "BUFline")
+                                            .attr("d", BUFline(BUF));
+
+                            var CHIline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "CHIline")
+                                            .attr("d", CHIline(CHI));
+
+                            var CLEline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "CLEline")
+                                            .attr("d", CLEline(CLE));
+
+                            var CINline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "CINline")
+                                            .attr("d", CINline(CIN));
+
+                            var MILline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "MILline")
+                                            .attr("d", MILline(MIL));
+
+                            var PHIline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "PHIline")
+                                            .attr("d", PHIline(PHI));
+
+                            var STLline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                        svg.append("path")
+                                            .attr("class", "STLline")
+                                            .attr("d", STLline(STL));
+                            
+                            var JACline = d3.svg.line()
+                                            .x(function(d) {return xScale(d.year); })
+                                            .y(function(d) {return yScale(d.rank); });
+
+                                            svg.append("path")
+                                            .attr("class", "JACline")
+                                            .attr("d", STLline(STL));
+            }
+            rankChart();
+        });
+        
+    
+    </script>
+</head>
+<body>
+    <h1>Rise and Fall of American Cities</h1>
+    <p><b>Chart one:</b> <i>Urban populations by year</i></p>
+    <div class="chart"></div>
+    <br/><br/><br/>
+    <p><b>Chart two:</b> <i>Urban populations by rank</i></p>
+    <div class="chart2"></div>
+</body>
+</html>
